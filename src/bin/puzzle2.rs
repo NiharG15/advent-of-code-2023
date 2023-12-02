@@ -31,47 +31,51 @@ fn check_regex_and_return_match(re: &Regex, haystack: &str) -> Option<u32> {
     None
 }
 
-fn to_round(string: &str) -> Round {
-    Round {
-        red: check_regex_and_return_match(&RED_PATTERN, string).unwrap_or(0),
-        green: check_regex_and_return_match(&GREEN_PATTERN, string).unwrap_or(0),
-        blue: check_regex_and_return_match(&BLUE_PATTERN, string).unwrap_or(0),
+impl Into<Round> for &str {
+    fn into(self) -> Round {
+        Round {
+            red: check_regex_and_return_match(&RED_PATTERN, self).unwrap_or(0),
+            green: check_regex_and_return_match(&GREEN_PATTERN, self).unwrap_or(0),
+            blue: check_regex_and_return_match(&BLUE_PATTERN, self).unwrap_or(0),
+        }
     }
 }
 
-fn is_game_possible(game: &Game, red_max: u32, blue_max: u32, green_max: u32) -> bool {
-    for r in &game.rounds {
-        if r.red > red_max {
-            return false;
+impl Game {
+    fn is_game_possible(&self, red_max: u32, blue_max: u32, green_max: u32) -> bool {
+        for r in &self.rounds {
+            if r.red > red_max {
+                return false;
+            }
+
+            if r.blue > blue_max {
+                return false;
+            }
+
+            if r.green > green_max {
+                return false;
+            }
         }
 
-        if r.blue > blue_max {
-            return false;
-        }
-
-        if r.green > green_max {
-            return false;
-        }
+        true
     }
 
-    true
-}
+    fn minimum_set(&self) -> Round {
+        let mut red_min = 0;
+        let mut blue_min = 0;
+        let mut green_min = 0;
 
-fn minimum_set(rounds: &[Round]) -> Round {
-    let mut red_min = 0;
-    let mut blue_min = 0;
-    let mut green_min = 0;
+        for r in &self.rounds {
+            red_min = max(red_min, r.red);
+            blue_min = max(blue_min, r.blue);
+            green_min = max(green_min, r.green);
+        }
 
-    for r in rounds {
-        red_min = max(red_min, r.red);
-        blue_min = max(blue_min, r.blue);
-        green_min = max(green_min, r.green);
-    }
-
-    Round {
-        red: red_min,
-        blue: blue_min,
-        green: green_min,
+        Round {
+            red: red_min,
+            blue: blue_min,
+            green: green_min,
+        }
     }
 }
 
@@ -86,7 +90,7 @@ fn main() {
             let rounds: Vec<&str> = parts[1].split(';').collect();
 
             Game {
-                rounds: rounds.iter().map(|r| to_round(r)).collect(),
+                rounds: rounds.iter().map(|&r| r.into()).collect(),
             }
         })
         .collect();
@@ -95,7 +99,7 @@ fn main() {
         .iter()
         .enumerate()
         .map(|(i, g)| {
-            if is_game_possible(g, 12, 14, 13) {
+            if g.is_game_possible(12, 14, 13) {
                 i + 1
             } else {
                 0
@@ -108,7 +112,7 @@ fn main() {
     let part2: u32 = games
         .iter()
         .map(|g| {
-            let min_set = minimum_set(&g.rounds);
+            let min_set = g.minimum_set();
 
             min_set.red * min_set.blue * min_set.green
         })
