@@ -1,5 +1,23 @@
 use std::collections::HashMap;
 
+use lazy_static::lazy_static;
+
+lazy_static! {
+    static ref NUM_TO_WORD_MAP: HashMap<&'static str, &'static str> = {
+        let mut map = HashMap::new();
+        map.insert("one", "1");
+        map.insert("two", "2");
+        map.insert("three", "3");
+        map.insert("four", "4");
+        map.insert("five", "5");
+        map.insert("six", "6");
+        map.insert("seven", "7");
+        map.insert("eight", "8");
+        map.insert("nine", "9");
+        map
+    };
+}
+
 fn main() {
     // let input = include_str!("../../inputs/puzzle1_sample.txt");
     let input = include_str!("../../inputs/puzzle1.txt");
@@ -21,23 +39,11 @@ fn main() {
 
     println!("-- Part 1 Answer: {}", sum);
 
-    let entries = [
-        ("one", "1"),
-        ("two", "2"),
-        ("three", "3"),
-        ("four", "4"),
-        ("five", "5"),
-        ("six", "6"),
-        ("seven", "7"),
-        ("eight", "8"),
-        ("nine", "9"),
-    ];
-
     let sum2: u32 = lines
         .iter()
         // .map(|line| pre_process(&line))
         .map(|line| {
-            let mut indices = entries.iter().flat_map(|e| {
+            let mut indices = NUM_TO_WORD_MAP.iter().flat_map(|e| {
                 line.match_indices(e.0)
                 .chain(line.match_indices(e.1))
             })
@@ -60,16 +66,5 @@ fn main() {
 }
 
 fn maybe_word_to_num(maybe_word: &str) -> &str {
-    let mut map = HashMap::new();
-    map.insert("one", "1");
-    map.insert("two", "2");
-    map.insert("three", "3");
-    map.insert("four", "4");
-    map.insert("five", "5");
-    map.insert("six", "6");
-    map.insert("seven", "7");
-    map.insert("eight", "8");
-    map.insert("nine", "9");
-
-    map.get(maybe_word).unwrap_or(&maybe_word)
+    NUM_TO_WORD_MAP.get(maybe_word).unwrap_or(&maybe_word)
 }
