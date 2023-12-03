@@ -53,15 +53,14 @@ fn main() {
                 c if c.is_numeric() => {}
                 c => {
                     // (i, j) must be a symbol, iterate neighbors
-                    let ii = i as i32;
-                    let ij = j as i32;
 
                     let mut neighbors = vec![];
                     let mut gear_seen_set: HashSet<(i32, i32)> = HashSet::new();
 
-                    iter_neighbors(ii, ij).into_iter().for_each(|(x, y)| {
+                    iter_neighbors(i as i32, j as i32).into_iter().for_each(|(x, y)| {
                         if let Some(m) = number_loc_map.get(&(x, y)) {
                             if c == &'*' && !gear_seen_set.contains(&(x, y)) {
+                                // (i, j) could be a gear, track neighbor vals
                                 neighbors.push(m.number);
                                 gear_seen_set.insert((x, y));
                                 for mj in m.start..m.end {
@@ -80,7 +79,7 @@ fn main() {
                     });
 
                     if neighbors.len() == 2 {
-                        gear_ratio_sum += neighbors.first().unwrap() * neighbors.last().unwrap();
+                        gear_ratio_sum += neighbors[0] * neighbors[1];
                     }
                 }
             }
