@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use lazy_static::lazy_static;
 use regex::Regex;
 
-use rust_aoc_2023::utils::iter_neighbors;
+use rust_aoc_2023::utils::iter_neighbors_bounded;
 
 lazy_static! {
     static ref NUM_PAT: Regex = Regex::new("(\\d+)").unwrap();
@@ -46,6 +46,9 @@ fn main() {
     let mut part_sum = 0;
     let mut gear_ratio_sum = 0;
 
+    let x_bound = schematic.len() as i32;
+    let y_bound = schematic[0].len() as i32;
+
     for (i, &line) in schematic.iter().enumerate() {
         for (j, c) in line.char_indices() {
             match &c {
@@ -57,7 +60,7 @@ fn main() {
                     let mut neighbors = vec![];
                     let mut gear_seen_set: HashSet<(i32, i32)> = HashSet::new();
 
-                    iter_neighbors(i as i32, j as i32).into_iter().for_each(|(x, y)| {
+                    iter_neighbors_bounded(i as i32, j as i32, x_bound, y_bound).into_iter().for_each(|(x, y)| {
                         if let Some(m) = number_loc_map.get(&(x, y)) {
                             if c == &'*' && !gear_seen_set.contains(&(x, y)) {
                                 // (i, j) could be a gear, track neighbor vals
