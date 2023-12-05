@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 fn main() {
     // let input = include_str!("../../inputs/puzzle4_sample.txt");
@@ -14,12 +14,21 @@ fn main() {
     for (i, &card_str) in card_strings.iter().enumerate() {
         cards_counts.entry(i).and_modify(|n| *n += 1).or_insert(1);
 
-        let parts = card_str.split(':').collect::<Vec<_>>();
-        let numbers_str = parts[1].split('|').collect::<Vec<_>>();
+        let numbers: Vec<Vec<u32>> = card_str
+            .split(':')
+            .nth(1)
+            .iter()
+            .flat_map(|s| s.split('|'))
+            .map(|s| {
+                s.split_ascii_whitespace()
+                    .map(|s1| s1.parse().unwrap())
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>();
 
-        let winning_numbers: HashSet<u32> = numbers_str[0].split(' ').filter(|s| !s.is_empty()).map(|s| s.trim().parse().unwrap()).collect();
+        let winning_numbers: HashSet<u32> = HashSet::from_iter(numbers[0].iter().cloned());
 
-        let your_numbers: HashSet<u32> = numbers_str[1].split(' ').filter(|s| !s.is_empty()).map(|s| s.trim().parse().unwrap()).collect();
+        let your_numbers: HashSet<u32> = HashSet::from_iter(numbers[1].iter().cloned());
 
         let winning_count = winning_numbers.intersection(&your_numbers).count() as u32;
 
@@ -30,7 +39,10 @@ fn main() {
         let winning_factor: u32 = *cards_counts.get(&i).unwrap_or(&1);
 
         for j in (i + 1)..=std::cmp::min(i + winning_count as usize, max_len - 1) {
-            cards_counts.entry(j).and_modify(|n| *n += winning_factor).or_insert(winning_factor);
+            cards_counts
+                .entry(j)
+                .and_modify(|n| *n += winning_factor)
+                .or_insert(winning_factor);
         }
     }
 
