@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
 fn main() {
-    let input = include_str!("../../inputs/puzzle5_sample.txt");
-    // let input = include_str!("../../inputs/puzzle5.txt");
+    // let input = include_str!("../../inputs/puzzle5_sample.txt");
+    let input = include_str!("../../inputs/puzzle5.txt");
 
     let lines = input.split("\n\n").collect::<Vec<_>>();
 
