@@ -49,3 +49,40 @@ pub fn iter_neighbors_bounded(x: i32, y: i32, max_x: i32, max_y: i32) -> Vec<(i3
         x >= &0 && x < &max_x && y >= &0 && y < &max_y
     }).collect()
 }
+
+
+/// Calculate LCM of a list of numbers
+///
+/// # Examples
+///
+/// ```
+/// use rust_aoc_2023::utils::lcm;
+///
+/// assert_eq!(lcm(&[1, 3, 5]), 15);
+/// ```
+pub fn lcm(nums: &[u64]) -> u64 {
+    if nums.len() == 1 {
+        return nums[0];
+    }
+
+    let a = nums[0];
+    let b = lcm(&nums[1..]);
+    a * b / gcd(a, b)
+}
+
+
+/// Calculate the GCD of two numbers.
+///
+/// # Examples
+///
+/// ```
+/// use rust_aoc_2023::utils::gcd;
+///
+/// assert_eq!(gcd(15, 18), 3);
+/// ```
+pub fn gcd(a: u64, b: u64) -> u64 {
+    if b == 0 {
+        return a;
+    }
+    gcd(b, a % b)
+}
