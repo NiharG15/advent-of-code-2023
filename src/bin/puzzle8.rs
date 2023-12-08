@@ -57,7 +57,7 @@ fn main() {
 
     let starting_nodes = nodes
         .keys()
-        .filter(|s| s.ends_with("A"))
+        .filter(|s| s.ends_with('A'))
         .cloned()
         .collect_vec();
     let mut steps_to_z = vec![];
@@ -67,16 +67,15 @@ fn main() {
         let mut curr = node;
         'inner: for c in instructions.chars().cycle() {
             steps += 1;
-            let next = match c {
+            curr = match c {
                 'L' => nodes.get(curr).unwrap().0,
                 'R' => nodes.get(curr).unwrap().1,
                 _ => unreachable!(),
             };
-            if next.ends_with('Z') {
+            if curr.ends_with('Z') {
                 steps_to_z.push(steps);
                 break 'inner;
             }
-            curr = next;
         }
     }
 
