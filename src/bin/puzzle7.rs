@@ -63,7 +63,7 @@ impl HandType {
     fn new(cards: &[Card]) -> HandType {
         let card_types = cards.iter().map(|c| c.t).collect_vec();
         
-        let set: HashMap<&str, usize> = card_types.iter().cloned().counts_by(|s| s);
+        let set: HashMap<&str, usize> = card_types.iter().copied().counts_by(|s| s);
 
         if set.len() == 1 {
             return HandType::FiveOfAKind;
@@ -99,7 +99,7 @@ impl HandType {
     fn new_joker(cards: &[Card]) -> HandType {
         let card_types = cards.iter().map(|c| c.t).collect_vec();
         
-        let set: HashMap<&str, usize> = card_types.iter().cloned().counts_by(|s| s);
+        let set: HashMap<&str, usize> = card_types.iter().copied().counts_by(|s| s);
 
         let joker_count: usize = *set.get("J").unwrap_or(&0);
 
@@ -158,10 +158,10 @@ fn compare_cards(c1: &[Card], c2: &[Card]) -> Ordering {
             continue;
         }
 
-        if card1.prio < card2.prio {
-            return Greater;
+        return if card1.prio < card2.prio {
+            Greater
         } else {
-            return Less;
+            Less
         }
     }
     unreachable!()
@@ -198,7 +198,7 @@ fn main() {
         (i + 1) as u32 * cns.2
     }).sum();
 
-    println!("-- Part 1 Answer: {}", part1_ans);
+    println!("-- Part 1 Answer: {part1_ans}");
 
     let mut cards_and_scores: Vec<(HandType, Vec<Card>, u32)> = lines.iter().map(|l| {
         let parts = l.split_ascii_whitespace().collect_vec();
@@ -225,5 +225,5 @@ fn main() {
         (i + 1) as u32 * cns.2
     }).sum();
 
-    println!("-- Part 2 Answer: {}", part2_ans);
+    println!("-- Part 2 Answer: {part2_ans}");
 }

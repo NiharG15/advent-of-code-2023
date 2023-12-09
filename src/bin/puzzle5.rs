@@ -34,7 +34,7 @@ fn main() {
         .min()
         .unwrap();
 
-    println!("-- Part 1 Answer: {}", part_1_ans);
+    println!("-- Part 1 Answer: {part_1_ans}");
 
     let part_2_ans = &seeds
         .chunks(2)
@@ -131,7 +131,7 @@ impl RangedMapList {
         self.maps
             .iter()
             .map(|m| m.get(val))
-            .filter(|o| o.is_some())
+            .filter(Option::is_some)
             .nth(0)
             .unwrap_or(Some(val))
             .unwrap()
@@ -142,7 +142,7 @@ impl RangedMapList {
         let mut curr_val = val_start;
         let val_max = val_start + range - 1;
         dbg!(val_start); dbg!(range);
-        for m in self.maps.iter() {
+        for m in &self.maps {
             dbg!(&m);
             let source_max = m.source_start + m.range - 1;
             if curr_val > source_max {

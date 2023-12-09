@@ -107,7 +107,7 @@ fn main() {
         })
         .sum();
 
-    println!("-- Part 1: {}", part1);
+    println!("-- Part 1: {part1}");
 
     let part2: u32 = games
         .iter()
@@ -118,5 +118,5 @@ fn main() {
         })
         .sum();
 
-    println!("-- Part 2: {}", part2);
+    println!("-- Part 2: {part2}");
 }

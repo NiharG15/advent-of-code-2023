@@ -26,9 +26,9 @@ fn main() {
             })
             .collect::<Vec<_>>();
 
-        let winning_numbers: HashSet<u32> = HashSet::from_iter(numbers[0].iter().cloned());
+        let winning_numbers: HashSet<u32> = numbers[0].iter().copied().collect::<HashSet<_>>();
 
-        let your_numbers: HashSet<u32> = HashSet::from_iter(numbers[1].iter().cloned());
+        let your_numbers: HashSet<u32> = numbers[1].iter().copied().collect::<HashSet<_>>();
 
         let winning_count = winning_numbers.intersection(&your_numbers).count() as u32;
 
@@ -46,6 +46,6 @@ fn main() {
         }
     }
 
-    println!("-- Part 1 Answer: {}", part_1_ans);
+    println!("-- Part 1 Answer: {part_1_ans}");
     println!("-- Part 2 Answer: {}", cards_counts.values().sum::<u32>());
 }

@@ -60,7 +60,7 @@ fn main() {
                     let mut neighbors = vec![];
                     let mut gear_seen_set: HashSet<(i32, i32)> = HashSet::new();
 
-                    iter_neighbors_bounded(i as i32, j as i32, x_bound, y_bound).into_iter().for_each(|(x, y)| {
+                    for (x, y) in iter_neighbors_bounded(i as i32, j as i32, x_bound, y_bound) {
                         if let Some(m) = number_loc_map.get(&(x, y)) {
                             if c == &'*' && !gear_seen_set.contains(&(x, y)) {
                                 // (i, j) could be a gear, track neighbor vals
@@ -79,7 +79,7 @@ fn main() {
                                 }
                             }
                         }
-                    });
+                    }
 
                     if neighbors.len() == 2 {
                         gear_ratio_sum += neighbors[0] * neighbors[1];
@@ -89,6 +89,6 @@ fn main() {
         }
     }
 
-    println!("-- Part 1 Answer: {}", part_sum);
-    println!("-- Part 2 Answer: {}", gear_ratio_sum);
+    println!("-- Part 1 Answer: {part_sum}");
+    println!("-- Part 2 Answer: {gear_ratio_sum}");
 }

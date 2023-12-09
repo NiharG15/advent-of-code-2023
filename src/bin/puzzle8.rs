@@ -21,7 +21,7 @@ fn main() {
     let nodes: HashMap<&str, (&str, &str)> = lines[1]
         .lines()
         .map(|l| {
-            if let Some((source, targets)) = l.split('=').map(|s| s.trim()).collect_tuple() {
+            if let Some((source, targets)) = l.split('=').map(str::trim).collect_tuple() {
                 let target_matches = TARGET_PAT.captures(targets).unwrap();
 
                 (
@@ -53,7 +53,7 @@ fn main() {
         }
     }
 
-    println!("-- Part 1 Answer: {}", steps);
+    println!("-- Part 1 Answer: {steps}");
 
     let starting_nodes = nodes
         .keys()

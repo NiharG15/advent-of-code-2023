@@ -25,7 +25,7 @@ fn main() {
 
     let ans1: u128 = ways_to_beat.iter().product();
 
-    println!("-- Part 1 Answer: {}", ans1);
+    println!("-- Part 1 Answer: {ans1}");
 
     let [time, distance] = lines
         .iter()
@@ -45,7 +45,7 @@ fn main() {
     let ways_to_beat = calc_ways_to_beat(&[time], &[distance]);
 
     let ans2: u128 = ways_to_beat.iter().product();
-    println!("-- Part 2 Answer: {}", ans2);
+    println!("-- Part 2 Answer: {ans2}");
 }
 
 fn calc_ways_to_beat(times: &[u128], distances: &[u128]) -> Vec<u128> {

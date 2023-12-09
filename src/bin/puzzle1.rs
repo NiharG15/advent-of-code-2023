@@ -54,7 +54,7 @@ fn main() {
             let first = maybe_word_to_num(indices.first().unwrap().1);
             let last = maybe_word_to_num(indices.last().unwrap().1);
 
-            let number: u32 = format!("{}{}", first, last)
+            let number: u32 = format!("{first}{last}")
                 .parse()
                 .unwrap();
 
@@ -62,7 +62,7 @@ fn main() {
         })
         .sum();
 
-    println!("-- Part 2 Answer: {}", sum2);
+    println!("-- Part 2 Answer: {sum2}");
 }
 
 fn maybe_word_to_num(maybe_word: &str) -> &str {
