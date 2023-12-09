@@ -1,3 +1,6 @@
+use std::ops::{Div, Mul, Rem};
+use num_traits::Zero;
+
 /// Returns the 8 neighbors of a given x, y coordinate without any bounds checks.
 ///
 /// # Examples
@@ -18,7 +21,7 @@ pub fn iter_neighbors(x: i32, y: i32) -> [(i32, i32); 8] {
         (-1, 1),
         (1, -1),
     ]
-    .map(|(di, dj)| (x + di, y + dj))
+        .map(|(di, dj)| (x + di, y + dj))
 }
 
 /// Returns the (upto) 8 neighbors of a given x, y coordinate with bounds
@@ -43,11 +46,11 @@ pub fn iter_neighbors_bounded(x: i32, y: i32, max_x: i32, max_y: i32) -> Vec<(i3
         (-1, 1),
         (1, -1),
     ]
-    .map(|(di, dj)| (x + di, y + dj))
-    .into_iter()
-    .filter(|(x,  y)| {
-        x >= &0 && x < &max_x && y >= &0 && y < &max_y
-    }).collect()
+        .map(|(di, dj)| (x + di, y + dj))
+        .into_iter()
+        .filter(|(x, y)| {
+            x >= &0 && x < &max_x && y >= &0 && y < &max_y
+        }).collect()
 }
 
 
@@ -59,8 +62,12 @@ pub fn iter_neighbors_bounded(x: i32, y: i32, max_x: i32, max_y: i32) -> Vec<(i3
 /// use rust_aoc_2023::utils::lcm;
 ///
 /// assert_eq!(lcm(&[1, 3, 5]), 15);
+/// assert_eq!(lcm(&[1.0, 3.0, 4.0]), 12.0);
 /// ```
-pub fn lcm(nums: &[u64]) -> u64 {
+pub fn lcm<T>(nums: &[T]) -> T
+    where
+        T: Copy + PartialEq + Mul<Output=T> + Div<Output=T> + Zero + Rem<Output=T>
+{
     if nums.len() == 1 {
         return nums[0];
     }
@@ -80,8 +87,11 @@ pub fn lcm(nums: &[u64]) -> u64 {
 ///
 /// assert_eq!(gcd(15, 18), 3);
 /// ```
-pub fn gcd(a: u64, b: u64) -> u64 {
-    if b == 0 {
+pub fn gcd<T>(a: T, b: T) -> T
+    where
+        T: Rem<Output=T> + Copy + Zero
+{
+    if b.is_zero() {
         return a;
     }
     gcd(b, a % b)
