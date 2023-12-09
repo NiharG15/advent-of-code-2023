@@ -13,7 +13,7 @@ impl Sequence {
                 break;
             }
 
-            start.push(successive_diff(start.last().unwrap()))
+            start.push(successive_diff(start.last().unwrap()));
         }
 
         Sequence { seq: start }
@@ -57,7 +57,7 @@ fn main() {
         })
         .sum();
 
-    println!("-- Part 1 Ans: {}", ans);
+    println!("-- Part 1 Ans: {ans}");
 
     let ans: i64 = lines
         .iter()
@@ -67,10 +67,10 @@ fn main() {
                 .collect_vec()
         })
         .map(|v: Vec<i64>| {
-            let mut s = Sequence::new(v.iter().rev().cloned().collect_vec());
+            let mut s = Sequence::new(v.iter().rev().copied().collect_vec());
             s.predict_next_element()
         })
         .sum();
 
-    println!("-- Part 2 Ans: {}", ans);
+    println!("-- Part 2 Ans: {ans}");
 }
