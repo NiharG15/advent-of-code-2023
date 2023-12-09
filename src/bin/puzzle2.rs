@@ -31,12 +31,12 @@ fn check_regex_and_return_match(re: &Regex, haystack: &str) -> Option<u32> {
     None
 }
 
-impl Into<Round> for &str {
-    fn into(self) -> Round {
+impl From<&str> for Round {
+    fn from(val: &str) -> Self {
         Round {
-            red: check_regex_and_return_match(&RED_PATTERN, self).unwrap_or(0),
-            green: check_regex_and_return_match(&GREEN_PATTERN, self).unwrap_or(0),
-            blue: check_regex_and_return_match(&BLUE_PATTERN, self).unwrap_or(0),
+            red: check_regex_and_return_match(&RED_PATTERN, val).unwrap_or(0),
+            green: check_regex_and_return_match(&GREEN_PATTERN, val).unwrap_or(0),
+            blue: check_regex_and_return_match(&BLUE_PATTERN, val).unwrap_or(0),
         }
     }
 }
