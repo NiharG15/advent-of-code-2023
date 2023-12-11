@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use lazy_static::lazy_static;
 use regex::Regex;
 
-use rust_aoc_2023::utils::iter_neighbors_bounded;
+use rust_aoc_2023::utils::iter_neighbors_bounded8;
 
 lazy_static! {
     static ref NUM_PAT: Regex = Regex::new("(\\d+)").unwrap();
@@ -60,7 +60,7 @@ fn main() {
                     let mut neighbors = vec![];
                     let mut gear_seen_set: HashSet<(i32, i32)> = HashSet::new();
 
-                    for (x, y) in iter_neighbors_bounded(i as i32, j as i32, x_bound, y_bound) {
+                    for (x, y) in iter_neighbors_bounded8(i as i32, j as i32, x_bound, y_bound) {
                         if let Some(m) = number_loc_map.get(&(x, y)) {
                             if c == &'*' && !gear_seen_set.contains(&(x, y)) {
                                 // (i, j) could be a gear, track neighbor vals
