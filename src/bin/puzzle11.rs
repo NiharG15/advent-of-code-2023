@@ -26,6 +26,7 @@ impl PartialOrd for Node {
     }
 }
 
+// todo: Reimplement this using simpler Manhattan Distance
 fn main() {
     // let input = include_str!("../../inputs/puzzle11_sample.txt");
     let input = include_str!("../../inputs/puzzle11.txt");
