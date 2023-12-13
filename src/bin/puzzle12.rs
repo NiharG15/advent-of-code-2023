@@ -26,7 +26,6 @@ fn main() {
         let chars = s.chars().collect_vec();
         let mut mem= HashMap::new();
         let count = backtrack_memoized(&chars, 0, group, 0, 0, &mut mem);
-        // println!("For s: {}, count: {}", s, count);
         sum += count;
     }
 
@@ -39,7 +38,6 @@ fn main() {
         let cloned_groups = group.repeat(5).iter().copied().collect_vec();
         let mut mem: HashMap<Key, usize> = HashMap::new();
         let count = backtrack_memoized(&cloned_chars, 0, &cloned_groups, 0, 0, &mut mem);
-        // println!("For s: {:?}, {:?} count: {}", cloned_chars, cloned_groups, count);
         sum += count;
     }
 
