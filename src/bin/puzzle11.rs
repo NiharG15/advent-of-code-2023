@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
-use rust_aoc_2023::utils::iter_neighbors4_bounded;
+use rust_aoc_2023::utils::{iter_neighbors4_bounded, print_grid};
 
 type Pos = (i64, i64);
 
@@ -207,14 +207,5 @@ fn insert_rows(grid: &mut Vec<Vec<char>>, rows_to_expand: &[usize]) {
 
     for r in rows_to_expand.iter().rev() {
         grid.insert(*r, row.clone());
-    }
-}
-
-fn print_grid(grid: &[Vec<char>]) {
-    for i in 0..grid.len() {
-        for j in 0..grid[0].len() {
-            print!("{}", grid[i][j]);
-        }
-        println!();
     }
 }

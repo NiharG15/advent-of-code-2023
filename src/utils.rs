@@ -132,3 +132,13 @@ pub fn iter_neighbors4_bounded(x: i64, y: i64, max_x: i64, max_y: i64) -> Vec<(i
         .filter(|(nx, ny)| *nx >= 0 && *nx < max_x && *ny >= 0 && *ny < max_y)
         .collect_vec()
 }
+
+/// Print a grid to stdout. Assumes that an mxn grid is passed in.
+pub fn print_grid(grid: &[Vec<char>]) {
+    for i in 0..grid.len() {
+        for j in 0..grid[0].len() {
+            print!("{}", grid[i][j]);
+        }
+        println!();
+    }
+}
