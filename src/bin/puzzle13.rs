@@ -160,16 +160,16 @@ fn find_row_mirrored(grid: &[Vec<char>]) -> Option<usize> {
 
 fn cols_equal_with_smudge(grid: &[Vec<char>], c1: usize, c2: usize) -> (bool, Option<usize>) {
     let mut nequal_count = 0;
-    let mut nequal_indices = vec![];
+    let mut nequal_index = 0;
     for (i, row) in grid.iter().enumerate() {
         if row[c1] != row[c2] {
             nequal_count += 1;
-            nequal_indices.push(i);
+            nequal_index = i;
         }
     }
 
     match nequal_count.cmp(&1) {
-        Equal => (false, Some(nequal_indices[0])),
+        Equal => (false, Some(nequal_index)),
         Greater => (false, None),
         Less => (true, None)
     }
@@ -179,17 +179,17 @@ fn rows_equal_with_smudge(grid: &[Vec<char>], r1: usize, r2: usize) -> (bool, Op
     let row1 = &grid[r1];
     let row2 = &grid[r2];
     let mut nequal_count = 0;
-    let mut nequal_indices = vec![];
+    let mut nequal_index = 0;
 
     for ((i, a), b) in row1.iter().enumerate().zip(row2.iter()) {
         if a != b {
             nequal_count += 1;
-            nequal_indices.push(i);
+            nequal_index = i;
         }
     }
 
     match nequal_count.cmp(&1) {
-        Equal => (false, Some(nequal_indices[0])),
+        Equal => (false, Some(nequal_index)),
         Greater => (false, None),
         Less => (true, None)
     }
