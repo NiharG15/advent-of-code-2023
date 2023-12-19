@@ -45,6 +45,22 @@ impl From<&str> for Operation {
     }
 }
 
+impl Operation {
+    fn func(&self, x1: usize, x2: usize) -> bool {
+        match &self {
+            Operation::GreaterThan => { x1 > x2 }
+            Operation::LessThan => { x1 < x2 }
+        }
+    }
+
+    fn func_range(&self, start: usize, end: usize, threshold: usize) -> ((usize, usize), (usize, usize)) {
+        match &self {
+            Operation::GreaterThan => ((start, threshold), (threshold + 1, end)),
+            Operation::LessThan => ((threshold, end), (start, threshold - 1))
+        }
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Hash)]
 enum Condition {
     Simple(String),
@@ -72,10 +88,7 @@ impl Condition {
                     Quality::A => part.a,
                     Quality::S => part.s,
                 };
-                match op {
-                    Operation::GreaterThan => quality > *threshold,
-                    Operation::LessThan => quality < *threshold,
-                }
+                op.func(quality, *threshold)
             }
         }
     }
@@ -91,34 +104,22 @@ impl Condition {
                 let new_part_set = match q {
                     Quality::X => {
                         let (m, a, s) = (ps.m, ps.a, ps.s);
-                        let x = match op {
-                            Operation::GreaterThan => ((ps.x.0, *threshold), (*threshold + 1, ps.x.1)),
-                            Operation::LessThan => ((*threshold, ps.x.1), (ps.x.0, *threshold - 1)),
-                        };
+                        let x = op.func_range(ps.x.0, ps.x.1, *threshold);
                         (PartSet { x: x.0, m, a, s }, PartSet { x: x.1, m, a, s })
                     }
                     Quality::M => {
                         let (x, a, s) = (ps.x, ps.a, ps.s);
-                        let m = match op {
-                            Operation::GreaterThan => ((ps.m.0, *threshold), (*threshold + 1, ps.m.1)),
-                            Operation::LessThan => ((*threshold, ps.m.1), (ps.m.0, *threshold - 1))
-                        };
+                        let m = op.func_range(ps.m.0, ps.m.1, *threshold);
                         (PartSet { x, m: m.0, a, s }, PartSet { x, m: m.1, a, s })
                     }
                     Quality::A => {
                         let (x, m, s) = (ps.x, ps.m, ps.s);
-                        let a = match op {
-                            Operation::GreaterThan => ((ps.a.0, *threshold), (*threshold + 1, ps.a.1)),
-                            Operation::LessThan => ((*threshold, ps.a.1), (ps.a.0, *threshold - 1)),
-                        };
+                        let a = op.func_range(ps.a.0, ps.a.1, *threshold);
                         (PartSet { x, m, a: a.0, s }, PartSet { x, m, a: a.1, s })
                     }
                     Quality::S => {
                         let (x, m, a) = (ps.x, ps.m, ps.a);
-                        let s = match op {
-                            Operation::GreaterThan => ((ps.s.0, *threshold), (*threshold + 1, ps.s.1)),
-                            Operation::LessThan => ((*threshold, ps.s.1), (ps.s.0, *threshold - 1))
-                        };
+                        let s = op.func_range(ps.s.0, ps.s.1, *threshold);
                         (PartSet { x, m, a, s: s.0 }, PartSet { x, m, a, s: s.1 })
                     }
                 };
