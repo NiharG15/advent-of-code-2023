@@ -18,7 +18,6 @@ enum Module {
     },
     Conjunction {
         name: String,
-        state: bool,
         inputs: HashMap<String, Pulse>,
         outputs: Vec<String>
     },
@@ -36,7 +35,6 @@ impl Module {
             "broadcaster" => Self::Broadcast { name: name.to_owned(), outputs },
             s if s.starts_with('&') => Self::Conjunction {
                 name: s.trim_start_matches('&').to_string(),
-                state: false,
                 inputs: HashMap::default(),
                 outputs,
             },
@@ -50,21 +48,11 @@ impl Module {
         }
     }
 
-    fn outputs(&self) -> Vec<String> {
-        match &self {
-            Module::FlipFlop { name, state, outputs } => outputs.clone(),
-            Module::Conjunction { name, state, inputs, outputs } => outputs.clone(),
-            Module::Broadcast { name, outputs } => outputs.clone(),
-            Module::Button => vec!["broadcaster".to_string()],
-            Module::Output => vec![],
-        }
-    }
-
     fn name(&self) -> String {
         match &self {
-            Module::FlipFlop { name, state, outputs } => name.clone(),
-            Module::Conjunction { name, state, inputs, outputs } => name.clone(),
-            Module::Broadcast { name, outputs } => name.clone(),
+            Module::FlipFlop { name, state: _, outputs: _ } => name.clone(),
+            Module::Conjunction { name, inputs: _, outputs: _ } => name.clone(),
+            Module::Broadcast { name, outputs: _ } => name.clone(),
             Module::Button => "button".to_owned(),
             Module::Output => "output".to_owned()
         }
@@ -72,7 +60,7 @@ impl Module {
 
     fn process_pulse(&mut self, input: &str, pulse: Pulse) -> Vec<(String, Pulse)> {
         match self {
-            Module::FlipFlop { name, state, outputs } => {
+            Module::FlipFlop { name: _, state, outputs } => {
                 if let Pulse::Low = pulse {
                     *state = state.not();
                     let output_pulse = if *state { Pulse::High } else { Pulse::Low };
@@ -81,7 +69,7 @@ impl Module {
                     vec![]
                 }
             }
-            Module::Conjunction { name, state, inputs, outputs } => {
+            Module::Conjunction { name: _, inputs, outputs } => {
                 inputs.insert(input.to_owned(), pulse);
                 if inputs.values().all(|v| v == &Pulse::High) {
                     outputs.iter().map(|s| (s.clone(), Pulse::Low)).collect_vec()
@@ -90,16 +78,14 @@ impl Module {
 
                 }
             }
-            Module::Broadcast { name, outputs } => {
-                outputs.iter().map(|s| (s.clone(), pulse.clone())).collect_vec()
+            Module::Broadcast { name: _, outputs } => {
+                outputs.iter().map(|s| (s.clone(), pulse)).collect_vec()
             }
             Module::Button => vec![("broadcaster".to_owned(), Pulse::Low)],
             Module::Output => vec![]
         }
     }
 }
-
-type ModulePulse = (String, Pulse);
 
 fn main() {
     // let input = include_str!("../../inputs/puzzle20_sample.txt");
@@ -121,7 +107,7 @@ fn main() {
     for (name, outputs) in &name_to_outputs {
         for s in outputs {
             let module = modules.get_mut(s.as_str());
-            if let Some(Module::Conjunction { name: _, state: _, inputs, outputs: _ }) = module {
+            if let Some(Module::Conjunction { name: _, inputs, outputs: _ }) = module {
                 inputs.insert(name.clone(), Pulse::Low);
             }
         }
@@ -149,7 +135,7 @@ fn main() {
     while count <= 100000 {
         let mut current_pulses: Vec<(String, String, Pulse)> = vec![("button".to_owned(), "broadcaster".to_owned(), Pulse::Low)];
         while !current_pulses.is_empty() {
-            current_pulses.iter().map(|(i, o, p)| p).for_each(|p| {
+            current_pulses.iter().map(|(_i, _o, p)| p).for_each(|p| {
                 match p {
                     Pulse::High => high_count += 1,
                     Pulse::Low => low_count += 1,
