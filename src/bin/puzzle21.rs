@@ -1,8 +1,6 @@
-use std::collections::{HashMap, HashSet};
-use std::collections::hash_map::Entry;
+use std::collections::HashSet;
 
 use itertools::Itertools;
-use rust_aoc_2023::utils::print_grid;
 
 fn main() {
     // let input = include_str!("../../inputs/puzzle21_sample.txt");
@@ -23,8 +21,15 @@ fn main() {
     let part1_count = bfs(&grid, starting_position, 64);
     println!("-- Part 1 Ans: {part1_count}");
 
-    let part2_count = bfs_unbounded(&grid, starting_position, 5000);
-    // let part2_count = fofn(26501365 / 131);
+    /*
+    The number of nodes added at each 65th step forms a quadratic sequence.
+    Get the first 3 terms of the sequence by running bfs unbounded:
+         3882, 34441, 95442
+     Using the formula for nth term in a quadratic sequence, we get fofn.
+     fofn at n = 202300 is the Part 2 answer.
+     */
+    bfs_unbounded(&grid, starting_position, 5000);
+    let part2_count = fofn(26501365 / 131);
     println!("-- Part 2 Ans: {part2_count}");
 }
 
