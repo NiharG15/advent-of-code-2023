@@ -1,8 +1,8 @@
 use std::ops::{Add, Mul};
 
 use itertools::Itertools;
-use z3::{Config, Context, SatResult, Solver};
 use z3::ast::{Ast, Int};
+use z3::{Config, Context, SatResult, Solver};
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 struct Hailstone {
@@ -46,13 +46,6 @@ impl Hailstone {
         let x2 = self.x + self.vx;
         let y2 = self.y + self.vy;
         (x1, y1, x2, y2)
-    }
-
-    fn get_3d_line(&self) -> (i128, i128, i128, i128, i128, i128) {
-        let x2 = self.x + self.vx;
-        let y2 = self.y + self.vy;
-        let z2 = self.z + self.vz;
-        (self.x, self.y, self.z, x2, y2, z2)
     }
 
     fn point_of_2d_intersection(&self, other: &Hailstone) -> Option<(i128, i128)> {
@@ -122,12 +115,19 @@ fn main() {
 
     println!("-- Part 1 Ans: {intersection_count_2d}");
 
-
     let context = Context::new(&Config::new());
     let solver = Solver::new(&context);
 
-    let (x, y, z) = (Int::new_const(&context, "X"), Int::new_const(&context, "Y"), Int::new_const(&context, "Z"));
-    let (vx, vy, vz) = (Int::new_const(&context, "VX"), Int::new_const(&context, "VY"), Int::new_const(&context, "VZ"));
+    let (x, y, z) = (
+        Int::new_const(&context, "X"),
+        Int::new_const(&context, "Y"),
+        Int::new_const(&context, "Z"),
+    );
+    let (vx, vy, vz) = (
+        Int::new_const(&context, "VX"),
+        Int::new_const(&context, "VY"),
+        Int::new_const(&context, "VZ"),
+    );
 
     let zero = Int::from_i64(&context, 0);
 
@@ -148,7 +148,15 @@ fn main() {
     assert_eq!(solver.check(), SatResult::Sat);
 
     let model = solver.get_model().unwrap();
-    let (x, y, z) = (model.eval(&x, false).unwrap(), model.eval(&y, false).unwrap(), model.eval(&z, false).unwrap());
+    let (x, y, z) = (
+        model.eval(&x, false).unwrap(),
+        model.eval(&y, false).unwrap(),
+        model.eval(&z, false).unwrap(),
+    );
 
-    println!("-- Part 2 Ans: {}", x.as_i64().unwrap() + y.as_i64().unwrap() + z.as_i64().unwrap());
+    println!(
+        "-- Part 2 Ans: {}",
+        x.as_i64().unwrap() + y.as_i64().unwrap() + z.as_i64().unwrap()
+    );
 }
+
